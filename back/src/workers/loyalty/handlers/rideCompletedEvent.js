@@ -13,24 +13,26 @@ const riderModel = require('../../../models/riders');
  * @returns {void}
  */
 async function handleRideCompletedEvent(message, messageFields) {
-  const { id: riderId, name } = message.payload;
-
+  const { rider_id: riderId, amount } = message.payload;
+  var rider = riderModel.findOneById(riderId);
+  rider.
   logger.info(
-    { rider_id: riderId, name },
-    '[worker.handleSignupEvent] Received user ride completed event',
+    { rider_id: riderId },
+    '[worker.handleRideCompletedEvent] Received user ride completed event',
   );
 
   // TODO handle idempotency
 
   try {
     logger.info(
-      { rider_id: riderId, name },
-      '[worker.handleSignupEvent] Insert rider',
-    );
-    await riderModel.insertOne({
-      _id: riderId,
-      name,
-    });
+      { rider_id: riderId },
+      '[worker.handleRideCompletedEvent] Update rider',
+	);
+	
+	await riderModel.updateOne(
+		riderId,
+		{ status: updatedStatus, ride_completed: rideCompleted }
+	);
   } catch (err) {
     handleMessageError(err, message, messageFields);
   }

@@ -11,6 +11,7 @@ const riderSchema = Joi.object({
   _id: Joi.objectId().required(),
   name: Joi.string().min(6),
   status: Joi.valid(loyaltyStatuses).default('bronze'),
+  ride_completed: Joi.number().integer().min(0).default(0),
   created_at: Joi.date().default(() => dateLib.getDate(), 'time of creation'),
 });
 
@@ -97,6 +98,18 @@ async function updateOne(riderId, updatedFields) {
   return result;
 }
 
+/**
+ * Update a rider completed ride informations
+ *
+ * @param {ObjectId} riderId     - identifier of the updated rider
+ * @param {Object} updatedFields - fields that are updated
+ *
+ * @returns {Object/null} result of update if succeeded, null otherwise
+ */
+async function updateCompletedRide(riderId, updatedFields) {
+
+  }
+
 module.exports = {
   collection,
   createIndexes,
@@ -104,4 +117,5 @@ module.exports = {
   find,
   insertOne,
   updateOne,
+  updateCompletedRide,
 };
