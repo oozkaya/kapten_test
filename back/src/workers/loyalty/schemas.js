@@ -12,6 +12,16 @@ const signupSchema = Joi.object({
   }),
 });
 
+const rideCompletedSchema = Joi.object({
+  type: Joi.string().required(),
+  payload: Joi.object({
+    id: Joi.objectId().required(),
+    amount: Joi.number().required(),
+    rider_id: Joi.objectId().required(),
+  }),
+});
+
 module.exports = {
   signupSchema,
+  rideCompletedSchema,
 };

@@ -3,7 +3,7 @@
 const logger = require('chpr-logger');
 
 const { handleMessageError } = require('../../../lib/workers');
-const riderModel = require('../../../models/riders');
+const rideModel = require('../../../models/rides');
 
 /**
  * Bus message handler for user ride completed events
@@ -13,9 +13,13 @@ const riderModel = require('../../../models/riders');
  * @returns {void}
  */
 async function handleRideCompletedEvent(message, messageFields) {
-  const { rider_id: riderId, amount } = message.payload;
-  var rider = riderModel.findOneById(riderId);
-  rider.
+  print("TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST");
+  const { id: rideId, amount, rider_id: riderId } = message.payload;
+  const ride = { rideId, amount, riderId };
+  await rideModel.insertOne(ride);
+  await riderModel.updateOneStatus(riderId);
+  await riderModel.updateOneLoyaltyPoints(riderId, amount);
+
   logger.info(
     { rider_id: riderId },
     '[worker.handleRideCompletedEvent] Received user ride completed event',

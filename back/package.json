@@ -41,7 +41,7 @@
     "apidoc": "0.17.6",
     "body-parser": "1.18.3",
     "chpr-logger": "3.2.0",
-    "chpr-worker": "3.2.2",
+    "chpr-worker": "3.2.3",
     "co": "4.6.0",
     "co-express": "1.2.2",
     "eslint-config-airbnb": "17.1.0",

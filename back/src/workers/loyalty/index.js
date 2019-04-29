@@ -12,6 +12,7 @@ const Joi = require('../../lib/joi');
 const { handleSignupEvent } = require('./handlers');
 const { handleRideCompletedEvent } = require('./handlers');
 const { signupSchema } = require('./schemas');
+const { rideCompletedSchema } = require('./schemas');
 
 let worker;
 
@@ -29,7 +30,7 @@ async function start() {
           handle: handleSignupEvent,
           validate: message => Joi.assert(message, signupSchema),
           routingKey: 'rider.signup',
-		},
+		    },
         {
           handle: handleRideCompletedEvent,
           validate: message => Joi.assert(message, rideCompletedSchema),
