@@ -26,6 +26,17 @@ function _validateSchema(ride) {
 }
 
 /**
+ * Return the result of ride schema consistency
+ *
+ * @param {Object} ride - the ride to validate
+ *
+ * @returns {Object} Referral: valid version of ride or error
+ */
+function isValidRideSchema(ride) {
+	return _validateSchema(ride);
+}
+
+/**
  * Return the rides collection
  *
  * @returns {Object} object to manipulate rides collection
@@ -104,4 +115,5 @@ module.exports = {
   find,
   insertOne,
   updateOne,
+  isValidRideSchema,
 };

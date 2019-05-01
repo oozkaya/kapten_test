@@ -21,6 +21,17 @@ async function handleSignupEvent(message, messageFields) {
     '[worker.handleSignupEvent] Received user signup event',
   );
 
+  try {
+	await riderModel.isValidRiderSchema({ _id: riderId, name });
+  } catch (err)
+  {
+    logger.error(
+	  { message, messageFields },
+	  '[worker.handleSignupEvent] message.payload invalid'
+    );
+    throw new Error("invalid arguments in message.payload"); 
+  }
+
   var riderIdObj = ObjectId.createFromHexString(riderId);
   var rider_nbr = await riderModel.collection().count({ _id: riderIdObj });
   if (rider_nbr >= 1) {

@@ -144,6 +144,18 @@ describe('workers/loyalty', () => {
       expect(riders).to.deep.equal([]);
     });
 
+	it('fails validation if name no valid string', async () => {
+		const errorSpy = sandbox.spy(logger, 'error');
+		await publish('rider.signup', {
+			type: message.type,
+			payload: { ...message.payload, name: 5 },
+		});
+		await worker.wait(worker.TASK_FAILED);
+  
+		const riders = await riderModel.find().toArray();
+		expect(riders).to.deep.equal([]);
+	});
+
     it('fails validation if name contains less than 6 letters', async () => {
       await publish('rider.signup', {
         type: message.type,

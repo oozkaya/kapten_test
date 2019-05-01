@@ -23,12 +23,15 @@ async function handleRideCompletedEvent(message, messageFields) {
 		'[worker.handleRideCompletedEvent] Received user ride completed event',
   );
 
-  if (!rideId || amount < 0 || !riderId) {
+  try {
+	  await rideModel.isValidRideSchema({ _id: rideId, amount, rider_id: riderId });
+  } catch (err)
+  {
 	logger.error(
 		{ message, messageFields },
 		'[worker.handleRideCompletedEvent] message.payload invalid'
 	);
-	throw new Error("invalid arguments in message.payload");
+	throw new Error("invalid arguments in message.payload"); 
   }
 
   var rideIdObj = ObjectId.createFromHexString(rideId);

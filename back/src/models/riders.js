@@ -30,6 +30,17 @@ function _validateSchema(rider) {
 }
 
 /**
+ * Return the result of rider schema consistency
+ *
+ * @param {Object} rider - the rider to validate
+ *
+ * @returns {Object} Referral: valid version of rider or error
+ */
+function isValidRiderSchema(rider) {
+	return _validateSchema(rider);
+}
+
+/**
  * Return the riders collection
  *
  * @returns {Object} object to manipulate riders collection
@@ -167,4 +178,5 @@ module.exports = {
   updateOne,
   updateOneStatus,
   updateOneLoyaltyPoints,
+  isValidRiderSchema,
 };
