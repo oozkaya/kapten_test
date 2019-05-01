@@ -6,6 +6,8 @@ const dateLib = require('../lib/date');
 const Joi = require('../lib/joi');
 const rideModel = require('./rides');
 
+const { ObjectId } = require('mongodb');
+
 const COLLECTION_NAME = 'riders';
 
 const riderSchema = Joi.object({
@@ -107,16 +109,17 @@ async function updateOne(riderId, updatedFields) {
  * @returns {Object/null} result of update if succeeded, null otherwise
  */
 async function updateOneStatus(riderId) {
-  const ride_nbr = rideModel.collection().count({ rider_id: riderId });
+  var riderIdObj = ObjectId.createFromHexString(riderId);
+  var ride_nbr = await rideModel.collection().count({ rider_id: riderIdObj });
   var res = null;
   if (ride_nbr >= 20 && ride_nbr < 50) {
-      res = updateOne(riderId, { status: 'silver' });
+      res = updateOne(riderIdObj, { status: 'silver' });
   }
   else if (ride_nbr >= 50 && ride_nbr < 100) {
-      res = updateOne(riderId, { status: 'gold' });
+      res = updateOne(riderIdObj, { status: 'gold' });
   }
   else if (ride_nbr >= 100) {
-      res = updateOne(riderId, { status: 'platinum' });
+      res = updateOne(riderIdObj, { status: 'platinum' });
   }
   return res;
 }
@@ -129,9 +132,12 @@ async function updateOneStatus(riderId) {
  * @returns {Object/null} result of update if succeeded, null otherwise
  */
 async function updateOneLoyaltyPoints(riderId, amount) {
-  var query = collection().find({ _id: riderId }, { status: 1, _id: 0});
+  var riderIdObj = ObjectId.createFromHexString(riderId);
+  var query = await collection().find({ _id: riderIdObj }, { status: 1, _id: 0}).toArray();
+  if (!query[0])
+  	return null;
   var status = query[0]['status'];
-  query = collection().find({ _id: riderId }, { loyalty_points: 1, _id: 0});
+  query = await collection().find({ _id: riderIdObj }, { loyalty_points: 1, _id: 0}).toArray();
   var curr_lp = query[0]['loyalty_points'];
   var lp = 0;
   switch (status) {
@@ -148,7 +154,7 @@ async function updateOneLoyaltyPoints(riderId, amount) {
       lp = 10 * amount + curr_lp;
       break;
   }
-  var res = updateOne(riderId, { loyalty_points:  lp});
+  var res = updateOne(riderIdObj, { loyalty_points:  lp});
   return res;
 }
 

@@ -2,12 +2,15 @@
 
 const { getDb } = require('../lib/mongodb');
 const Joi = require('../lib/joi');
+const riderModel = require('./riders');
+
+const { ObjectId } = require('mongodb');
 
 const COLLECTION_NAME = 'rides';
 
 const rideSchema = Joi.object({
   _id: Joi.objectId().required(),
-  amount: Joi.number().required(),
+  amount: Joi.number().min(0).required(),
   rider_id: Joi.objectId().required(),
 });
 

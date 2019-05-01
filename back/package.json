@@ -4,7 +4,7 @@
   "description": "Loyalty service technical test back-end",
   "main": "src/app.js",
   "scripts": {
-    "coverage": "LOGGER_LEVEL=fatal NODE_ENV=test nyc _mocha -b",
+    "coverage": "LOGGER_LEVEL=fatal NODE_ENV=test nyc  --reporter=text _mocha -b",
     "eslint": "eslint src",
     "mocha": "NODE_ENV=test _mocha -b",
     "start": "node .",
@@ -13,7 +13,7 @@
     "postinstall": "npm run apidoc",
     "lint": "npm run prettier && npm run eslint",
     "prettier": "prettier -l '{src,test}/**/*.{js,yml,yaml,json}'",
-    "test": "npm run lint && npm run coverage",
+    "test": "npm run lint ; npm run coverage",
     "apidoc": "apidoc -i src/api -o apidoc/"
   },
   "engines": {

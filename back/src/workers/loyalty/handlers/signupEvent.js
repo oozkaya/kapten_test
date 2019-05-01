@@ -5,6 +5,7 @@ const logger = require('chpr-logger');
 const { handleMessageError } = require('../../../lib/workers');
 const riderModel = require('../../../models/riders');
 
+const { ObjectId } = require('mongodb');
 /**
  * Bus message handler for user signup events
  *
@@ -20,7 +21,15 @@ async function handleSignupEvent(message, messageFields) {
     '[worker.handleSignupEvent] Received user signup event',
   );
 
-  // TODO handle idempotency
+  var riderIdObj = ObjectId.createFromHexString(riderId);
+  var rider_nbr = await riderModel.collection().count({ _id: riderIdObj });
+  if (rider_nbr >= 1) {
+	  logger.error(
+		  { message, messageFields },
+		  '[worker.handleSignupEvent] Rider id already exists'
+	  );
+	  throw new Error("duplicate key error in riders collection");
+  }
 
   try {
     logger.info(
